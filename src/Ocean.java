@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 
 public class Ocean {
+    public static final int STATE_MENU = 0;
+    public static final int STATE_PLAY = 1;
+    public static final int STATE_END = 2;
+
     private OceanView window;
     private Player player;
     private ArrayList<Enemy> enemies;
@@ -13,11 +17,16 @@ public class Ocean {
     // TODO
     public Ocean() {
         window = new OceanView(this);
+        player = new Player(window, 0, 0);
+        state = 1;
+        waveNum = 0;
     }
 
     // TODO
     public void play() {
+        while (player.isAlive()) {
 
+        }
     }
 
     // TODO

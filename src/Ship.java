@@ -11,7 +11,9 @@ public class Ship {
 
     // TODO
     public Ship(OceanView window, int x, int y) {
-
+        this.window = window;
+        this.x = x;
+        this.y = y;
     }
 
     // TODO
@@ -21,7 +23,7 @@ public class Ship {
 
     // TODO
     public void setImage(Image image) {
-
+        this.image = image;
     }
 
     // TODO (maybe leave it)
@@ -29,6 +31,6 @@ public class Ship {
 
     // TODO
     public void draw(Graphics g) {
-
+        g.drawImage(image, x, y, WIDTH, HEIGHT, window);
     }
 }

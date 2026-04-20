@@ -8,6 +8,12 @@ public class Player extends Ship {
     // TODO
     public Player(OceanView window, int x, int y) {
         super(window, x, y);
+        health = 100;
+        points = 0;
+    }
+
+    public boolean isAlive() {
+        return health > 0;
     }
 
     // TODO
