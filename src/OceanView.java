@@ -5,7 +5,7 @@ public class OceanView extends JFrame {
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 800;
 
-    private static final Color backgroundColor = Color.BLUE;
+    private static final Color BACKGROUND_COLOR = new Color(50, 50, 200);
 
     private Ocean backend;
 
@@ -13,11 +13,12 @@ public class OceanView extends JFrame {
     public OceanView(Ocean backend) {
         this.backend = backend;
 
-        createBufferStrategy(2);
         this.setTitle("Pirate Party");
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+
+        createBufferStrategy(2);
     }
 
     // TODO
@@ -36,17 +37,23 @@ public class OceanView extends JFrame {
     }
 
     // TODO
-    public void drawMenu(Graphics g) {
+    private void drawMenu(Graphics g) {
 
     }
 
     // TODO
-    public void drawOcean(Graphics g) {
+    private void drawOcean(Graphics g) {
+        drawBackground(g);
         backend.getPlayer().draw(g);
     }
 
     // TODO
-    public void drawEnd(Graphics g) {
+    private void drawEnd(Graphics g) {
 
+    }
+
+    private void drawBackground(Graphics g) {
+        g.setColor(BACKGROUND_COLOR);
+        g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 }

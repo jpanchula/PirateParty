@@ -1,6 +1,8 @@
 import java.awt.*;
 
 public class Ship {
+    public static final int DIR_UP = 0, DIR_DOWN = 1, DIR_LEFT = 2, DIR_RIGHT = 3;
+
     private static final int WIDTH = 100;
     private static final int HEIGHT = 100;
 
@@ -16,6 +18,16 @@ public class Ship {
         this.y = y;
     }
 
+    public void setVelocity(int dx, int dy) {
+        this.dx = dx;
+        this.dy = dy;
+    }
+
+    public void updatePosition() {
+        x += dx;
+        y += dy;
+    }
+
     // TODO
     public void shoot(int x, int y) {
 
@@ -25,9 +37,6 @@ public class Ship {
     public void setImage(Image image) {
         this.image = image;
     }
-
-    // TODO (maybe leave it)
-    public void move() {}
 
     // TODO
     public void draw(Graphics g) {
