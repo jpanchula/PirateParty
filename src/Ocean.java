@@ -9,9 +9,13 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 public class Ocean implements KeyListener, ActionListener {
+    /* Public Constant Variables */
     public static final int STATE_MENU = 0;
     public static final int STATE_PLAY = 1;
     public static final int STATE_END = 2;
+
+    /* Private Constant Variables */
+    private static final int DELAY_MILLISECONDS = 16;
 
     private OceanView window;
     private Player player;
@@ -22,7 +26,9 @@ public class Ocean implements KeyListener, ActionListener {
     private int shipsLeft;
     private int state;
 
+    // Vertical and horizontal inputs
     private boolean up, down, left, right;
+    private int vertical = 0, horizontal = 0;
 
     /* Constructor */
     public Ocean() {
@@ -35,31 +41,16 @@ public class Ocean implements KeyListener, ActionListener {
         waveNum = 0;
         shipsLeft = 0;
 
-        // Reduce buffering
-//        Toolkit.getDefaultToolkit().sync();
-
         // Create and start a timer
-        Timer clock = new Timer(16, this);
+        Timer clock = new Timer(DELAY_MILLISECONDS, this);
         clock.start();
     }
 
-    // TODO
+    // Performed ecah
     public void actionPerformed(ActionEvent e) {
-        int dx = 0;
-        int dy = 0;
-
-        if (up)
-            dy -= player.getSpeed();
-        if (down)
-            dy += player.getSpeed();
-        if (left)
-            dx -= player.getSpeed();
-        if (right)
-            dx += player.getSpeed();
-
-        player.setVelocity(dx, dy);
+        // Calculate the player's velocity based on the current inputs
+        player.calculateVelocity(up, down, left, right);
         player.updatePosition();
-
         window.repaint();
     }
 

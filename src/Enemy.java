@@ -5,11 +5,6 @@ public class Enemy extends Ship {
 
     // TODO
     public Enemy(OceanView window, int x, int y) {
-        super(window, x, y);
-    }
-
-    // TODO
-    public void move() {
-
+        super(window, x, y, 1);
     }
 }

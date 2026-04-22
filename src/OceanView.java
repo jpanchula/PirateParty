@@ -1,10 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 
 public class OceanView extends JFrame {
+    /* Public Constant Variables */
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 800;
 
+    /* Private Constant Variables */
     private static final Color BACKGROUND_COLOR = new Color(50, 50, 200);
 
     private Ocean backend;
@@ -21,8 +24,25 @@ public class OceanView extends JFrame {
         createBufferStrategy(2);
     }
 
-    // TODO
+    // Deals with double buffering stuff and calls myPaint
     public void paint(Graphics g) {
+        BufferStrategy bf = this.getBufferStrategy();
+        if (bf == null)
+            return;
+        Graphics g2 = null;
+        try {
+            g2 = bf.getDrawGraphics();
+            myPaint(g2);
+        }
+        finally {
+            g2.dispose();
+        }
+        bf.show();
+        Toolkit.getDefaultToolkit().sync();
+    }
+
+    // Main paint function
+    public void myPaint(Graphics g) {
         switch (backend.getState()) {
             case Ocean.STATE_MENU:
                 drawMenu(g);
