@@ -31,8 +31,18 @@ public class Ocean implements KeyListener, ActionListener {
     private int vertical = 0, horizontal = 0;
 
     /* Constructor */
+    // Frames per second for the game loop
+    private static final int FPS = 60;
+    private static final int FRAME_DELAY_MS = 1000 / FPS;
+
     public Ocean() {
         // Create the window and attach the KeyListener
+        cannonBalls = new ArrayList<>();
+        enemies = new ArrayList<>();
+        waveNum = 1;
+        shipsLeft = 0;
+        state = 0; // 0 = playing
+
         window = new OceanView(this);
         window.addKeyListener(this);
 
@@ -54,14 +64,37 @@ public class Ocean implements KeyListener, ActionListener {
         window.repaint();
     }
 
-    // TODO
-    public void spawnCannonBall(int spawnX, int spawnY, int endX, int endY) {
+    public void play() {
+        // Main game loop: update positions, repaint, sleep
+        while (true) {
+            // Update all cannon balls
+            ArrayList<CannonBall> toRemove = new ArrayList<>();
+            for (CannonBall cb : cannonBalls) {
+                cb.updatePosition();
+                if (cb.isDone()) {
+                    toRemove.add(cb);
+                }
+            }
+            cannonBalls.removeAll(toRemove);
 
+            // Repaint the window
+            window.repaint();
+
+            // Sleep to maintain frame rate
+            try {
+                Thread.sleep(FRAME_DELAY_MS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    // TODO
-    public void spawnExplosion(int x, int y) {
+    public void spawnCannonBall(int spawnX, int spawnY, int endX, int endY) {
+        cannonBalls.add(new CannonBall(spawnX, spawnY, endX, endY));
+    }
 
+    public void spawnExplosion(int x, int y) {
+        // Placeholder for explosion effect
     }
 
     /* KeyListener methods */
@@ -131,9 +164,8 @@ public class Ocean implements KeyListener, ActionListener {
         return shipsLeft;
     }
 
-    /* Main */
-
     public static void main(String[] args) {
         Ocean game = new Ocean();
+        game.play();
     }
 }

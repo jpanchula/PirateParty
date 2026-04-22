@@ -1,9 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class OceanView extends JFrame {
     /* Public Constant Variables */
+public class OceanView extends JFrame implements MouseListener {
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 800;
 
@@ -12,19 +14,27 @@ public class OceanView extends JFrame {
 
     private Ocean backend;
 
-    // TODO:
+    // Double buffer fields
+    private Image offscreenImage;
+    private Graphics offscreenGraphics;
+
     public OceanView(Ocean backend) {
         this.backend = backend;
 
         this.setTitle("Pirate Party");
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Register this view as its own mouse listener so clicks spawn cannon balls
+        this.addMouseListener(this);
+
         this.setVisible(true);
 
         createBufferStrategy(2);
     }
 
     // Deals with double buffering stuff and calls myPaint
+    @Override
     public void paint(Graphics g) {
         BufferStrategy bf = this.getBufferStrategy();
         if (bf == null)
@@ -41,6 +51,10 @@ public class OceanView extends JFrame {
         Toolkit.getDefaultToolkit().sync();
     }
 
+        if (offscreenImage == null) {
+            offscreenImage   = createImage(WINDOW_WIDTH, WINDOW_HEIGHT);
+            offscreenGraphics = offscreenImage.getGraphics();
+        }
     // Main paint function
     public void myPaint(Graphics g) {
         switch (backend.getState()) {
@@ -56,17 +70,49 @@ public class OceanView extends JFrame {
         }
     }
 
+
+        drawOcean(offscreenGraphics);
+
+
+        g.drawImage(offscreenImage, 0, 0, this);
+    }
+
+    // Suppress the default Swing clear-then-paint that causes flicker
+    @Override
+    public void update(Graphics g) {
+        paint(g);
+    }
+
+    public void drawMenu(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 36));
+        g.drawString("Pirate Party", WINDOW_WIDTH / 2 - 90, WINDOW_HEIGHT / 2);
+        g.setFont(new Font("Arial", Font.PLAIN, 18));
+        g.drawString("Click to start", WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 + 40);
     // TODO
     private void drawMenu(Graphics g) {
 
     }
 
+    public void drawOcean(Graphics g) {
+        // Draw ocean background
+        g.setColor(new Color(30, 100, 180));
+        g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+        // Draw all cannon balls
+        for (CannonBall cb : backend.getCannonBalls()) {
+            cb.draw(g);
+        }
     // TODO
     private void drawOcean(Graphics g) {
         drawBackground(g);
         backend.getPlayer().draw(g);
     }
 
+    public void drawEnd(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 36));
+        g.drawString("Game Over", WINDOW_WIDTH / 2 - 80, WINDOW_HEIGHT / 2);
     // TODO
     private void drawEnd(Graphics g) {
 
@@ -76,4 +122,18 @@ public class OceanView extends JFrame {
         g.setColor(BACKGROUND_COLOR);
         g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
+
+    /* MouseListener — spawn a cannon ball from (0,0) to wherever the user clicks */
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        int targetX = e.getX();
+        int targetY = e.getY();
+        backend.spawnCannonBall(0, 0, targetX, targetY);
+    }
+
+    @Override public void mousePressed(MouseEvent e) {}
+    @Override public void mouseReleased(MouseEvent e) {}
+    @Override public void mouseEntered(MouseEvent e) {}
+    @Override public void mouseExited(MouseEvent e) {}
 }
