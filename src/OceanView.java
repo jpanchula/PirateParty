@@ -67,11 +67,6 @@ public class OceanView extends JFrame  {
         g.drawImage(offscreenImage, 0, 0, this);
     }
 
-    // Suppress the default Swing clear-then-paint that causes flicker
-    @Override
-    public void update(Graphics g) {
-        paint(g);
-    }
 
     public void drawMenu(Graphics g) {
         g.setColor(Color.BLACK);
