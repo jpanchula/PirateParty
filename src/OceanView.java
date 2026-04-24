@@ -1,11 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 /* Public Constant Variables */
-public class OceanView extends JFrame implements MouseListener {
+public class OceanView extends JFrame  {
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 800;
 
@@ -21,8 +19,6 @@ public class OceanView extends JFrame implements MouseListener {
     public OceanView(Ocean backend) {
         this.backend = backend;
 
-        // Register this view as its own mouse listener so clicks spawn cannon balls
-        this.addMouseListener(this);
 
         this.setTitle("Pirate Party");
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -113,21 +109,6 @@ public class OceanView extends JFrame implements MouseListener {
         g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 
-    /* MouseListener — spawn a cannon ball from (0,0) to wherever the user clicks */
 
-    @Override
-    public void mouseClicked (MouseEvent e){
-        int targetX = e.getX();
-        int targetY = e.getY();
-        backend.spawnCannonBall( targetX, targetY);
-    }
 
-    @Override public void mousePressed (MouseEvent e){
-    }
-    @Override public void mouseReleased (MouseEvent e){
-    }
-    @Override public void mouseEntered (MouseEvent e){
-    }
-    @Override public void mouseExited (MouseEvent e){
-    }
 }
