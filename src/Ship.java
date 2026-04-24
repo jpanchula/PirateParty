@@ -59,3 +59,4 @@ public class Ship {
         g.drawImage(image, (int)x, (int)y, WIDTH, HEIGHT, window);
     }
 }
+//-

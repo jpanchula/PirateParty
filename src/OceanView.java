@@ -49,12 +49,7 @@ public class OceanView extends JFrame implements MouseListener {
         Toolkit.getDefaultToolkit().sync();
     }
 
-   /* if(offscreenImage ==null)
-    {
-        offscreenImage = createImage(WINDOW_WIDTH, WINDOW_HEIGHT);
-        offscreenGraphics = offscreenImage.getGraphics();
-    }
-*/
+
     // Main paint function
     public void myPaint(Graphics g) {
         switch (backend.getState()) {
@@ -100,6 +95,10 @@ public class OceanView extends JFrame implements MouseListener {
         for (CannonBall cb : backend.getCannonBalls()) {
             cb.draw(g);
         }
+
+        for (Enemy en : backend.getEnemies()) {
+            en.draw(g);
+        }
     }
 
 
@@ -120,7 +119,7 @@ public class OceanView extends JFrame implements MouseListener {
     public void mouseClicked (MouseEvent e){
         int targetX = e.getX();
         int targetY = e.getY();
-        backend.spawnCannonBall(0, 0, targetX, targetY);
+        backend.spawnCannonBall( targetX, targetY);
     }
 
     @Override public void mousePressed (MouseEvent e){
