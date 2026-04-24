@@ -2,8 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
-public class OceanView extends JFrame {
-    /* Public Constant Variables */
+/* Public Constant Variables */
+public class OceanView extends JFrame  {
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 800;
 
@@ -12,9 +12,9 @@ public class OceanView extends JFrame {
 
     private Ocean backend;
 
-    // TODO:
     public OceanView(Ocean backend) {
         this.backend = backend;
+
 
         this.setTitle("Pirate Party");
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -25,21 +25,22 @@ public class OceanView extends JFrame {
     }
 
     // Deals with double buffering stuff and calls myPaint
+    @Override
     public void paint(Graphics g) {
         BufferStrategy bf = this.getBufferStrategy();
         if (bf == null)
-            return;
+            createBufferStrategy(2);
         Graphics g2 = null;
         try {
             g2 = bf.getDrawGraphics();
             myPaint(g2);
-        }
-        finally {
+        } finally {
             g2.dispose();
         }
         bf.show();
         Toolkit.getDefaultToolkit().sync();
     }
+
 
     // Main paint function
     public void myPaint(Graphics g) {
@@ -54,26 +55,49 @@ public class OceanView extends JFrame {
                 drawEnd(g);
                 break;
         }
+
+
+        drawOcean(g);
+
     }
 
-    // TODO
-    private void drawMenu(Graphics g) {
 
+    public void drawMenu(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 36));
+        g.drawString("Pirate Party", WINDOW_WIDTH / 2 - 90, WINDOW_HEIGHT / 2);
+        g.setFont(new Font("Arial", Font.PLAIN, 18));
+        g.drawString("Click to start", WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 + 40);
+        // TODO
     }
 
-    // TODO
-    private void drawOcean(Graphics g) {
+    public void drawOcean (Graphics g) {
+        // Draw ocean background
         drawBackground(g);
         backend.getPlayer().draw(g);
+
+        // Draw all cannon balls
+        for (CannonBall cb : backend.getCannonBalls()) {
+            cb.draw(g);
+        }
+
+        for (Enemy en : backend.getEnemies()) {
+            en.draw(g);
+        }
     }
 
-    // TODO
-    private void drawEnd(Graphics g) {
 
+    public void drawEnd (Graphics g) {
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 36));
+        g.drawString("Game Over", WINDOW_WIDTH / 2 - 80, WINDOW_HEIGHT / 2);
     }
 
-    private void drawBackground(Graphics g) {
+    private void drawBackground (Graphics g){
         g.setColor(BACKGROUND_COLOR);
         g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
+
+
+
 }
