@@ -49,6 +49,10 @@ public class Ship {
         return speed;
     }
 
+    public double getX() { return x; }
+
+    public double getY() { return y; }
+
     // Draws the ship
     public void draw(Graphics g) {
         // Cast to int, but keep double precision for smoother movement

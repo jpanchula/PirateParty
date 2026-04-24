@@ -6,13 +6,13 @@ public class CannonBall {
     private static final int SPEED = 5; // pixels per frame
 
     private double x, y;           // current position (floating point for smooth motion)
-    private int startX, startY;
+    private double startX, startY;
     private int finalX, finalY;
     private double dx, dy;          // per-frame velocity components
     private boolean isExploding;
     private boolean done;
 
-    public CannonBall(int startX, int startY, int endX, int endY) {
+    public CannonBall(double startX, double startY, int endX, int endY) {
         this.x = startX;
         this.y = startY;
         this.startX = startX;
@@ -21,6 +21,8 @@ public class CannonBall {
         this.finalY = endY;
         this.isExploding = false;
         this.done = false;
+
+
 
         // Compute unit direction vector scaled to SPEED
         double dist = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));

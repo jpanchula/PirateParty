@@ -90,7 +90,7 @@ public class Ocean implements KeyListener, ActionListener {
     }
 
     public void spawnCannonBall(int spawnX, int spawnY, int endX, int endY) {
-        cannonBalls.add(new CannonBall(spawnX, spawnY, endX, endY));
+        cannonBalls.add(new CannonBall(player.getX() + 50, player.getY() + 50, endX, endY));
     }
 
     public void spawnExplosion(int x, int y) {
