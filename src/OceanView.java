@@ -12,10 +12,6 @@ public class OceanView extends JFrame  {
 
     private Ocean backend;
 
-    // Double buffer fields
-    private Image offscreenImage;
-    private Graphics offscreenGraphics;
-
     public OceanView(Ocean backend) {
         this.backend = backend;
 
@@ -63,8 +59,6 @@ public class OceanView extends JFrame  {
 
         drawOcean(g);
 
-
-        g.drawImage(offscreenImage, 0, 0, this);
     }
 
 
