@@ -1,14 +1,15 @@
 import javax.swing.*;
-//-
+
 public class Player extends Ship {
-    private int health;
+    private static final int SPEED = 2;
+    private static final int HEALTH = 100;
+
     private int points;
 
     // TODO
     public Player(OceanView window, int x, int y) {
-        super(window, x, y, 2);
+        super(window, x, y, SPEED, HEALTH);
         super.setImage(new ImageIcon("Resources/pirate_ship.png").getImage());
-        health = 100;
         points = 0;
     }
 
@@ -33,9 +34,5 @@ public class Player extends Ship {
         }
 
         setVelocity(dx, dy);
-    }
-
-    public boolean isAlive() {
-        return health > 0;
     }
 }
