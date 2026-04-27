@@ -49,46 +49,49 @@ public class OceanView extends JFrame  {
                 drawMenu(g);
                 break;
             case Ocean.STATE_PLAY:
-                drawOcean(g);
+                drawPlay(g);
                 break;
             case Ocean.STATE_END:
                 drawEnd(g);
                 break;
         }
-
-
-        drawOcean(g);
-
     }
 
 
-    public void drawMenu(Graphics g) {
+    private void drawMenu(Graphics g) {
+        // TODO
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 36));
         g.drawString("Pirate Party", WINDOW_WIDTH / 2 - 90, WINDOW_HEIGHT / 2);
         g.setFont(new Font("Arial", Font.PLAIN, 18));
         g.drawString("Click to start", WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 + 40);
-        // TODO
     }
 
-    public void drawOcean (Graphics g) {
+    private void drawPlay (Graphics g) {
         // Draw ocean background
         drawBackground(g);
+
+        // Draw the player
         backend.getPlayer().draw(g);
 
-        // Draw all cannon balls
-        for (CannonBall cb : backend.getCannonBalls()) {
-            cb.draw(g);
-        }
-
+        // Draw all enemies
         for (Enemy en : backend.getEnemies()) {
             en.draw(g);
         }
+
+        // Draw all CannonBalls
+        for (CannonBall cb : backend.getCannonBalls()) {
+            cb.draw(g);
+        }
     }
 
 
-    public void drawEnd (Graphics g) {
+    private void drawEnd (Graphics g) {
+        // Black background
         g.setColor(Color.BLACK);
+        g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        // White text
+        g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 36));
         g.drawString("Game Over", WINDOW_WIDTH / 2 - 80, WINDOW_HEIGHT / 2);
     }

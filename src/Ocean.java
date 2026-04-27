@@ -57,25 +57,47 @@ public class Ocean implements KeyListener, ActionListener, MouseListener {
         clock.start();
     }
 
+    // Called by the clock every 16 ms
     public void actionPerformed(ActionEvent e) {
-        // --- Player ---
-        player.calculateVelocity(up, down, left, right);
-        player.updatePosition();
+        switch(state) {
+            case STATE_PLAY:
+                updatePlay();
+                break;
+            case STATE_END:
 
-        // --- Cannon balls ---
-        ArrayList<CannonBall> ballsToRemove = new ArrayList<>();
+        }
+    }
+
+    // Play state update method
+    private void updatePlay() {
+        // Combined list of all ships
+        ArrayList<Ship> allShips = new ArrayList<>();
+        allShips.add(player);
+        allShips.addAll(enemies);
+
+        /* --- Player --- */
+        player.calculateVelocity(up, down, left, right);
+
+        /* --- CannonBalls --- */
         for (CannonBall cb : cannonBalls) {
             cb.updatePosition();
-            if (cb.isDone()) ballsToRemove.add(cb);
+            cb.applyDamage(allShips);
         }
-        cannonBalls.removeAll(ballsToRemove);
+        // Check if the player is dead
+        if (player.isDead()) {
+            state = STATE_END;
+        }
 
-        // --- Enemies ---
+        // Update arrays
+        cannonBalls.removeIf(CannonBall::isDone);
+        enemies.removeIf(Enemy::isDead);
+
+
+        /* --- Enemies --- */
         double playerCenterX = player.getX() + 50;
         double playerCenterY = player.getY() + 50;
         for (Enemy en : enemies) {
             en.chasePlayer(playerCenterX, playerCenterY);
-            en.updatePosition();
         }
 
         // Spawn a new enemy on an interval
@@ -84,14 +106,25 @@ public class Ocean implements KeyListener, ActionListener, MouseListener {
             spawnEnemy();
         }
 
+        /* --- Ships --- */
+        // Update the position of all the ships
+        for (Ship ship : allShips) {
+            ship.updatePosition();
+        }
+
+        // Repaint the window after everything has been updated
         window.repaint();
     }
 
+    // End state update method
+    private void updateEnd() {
+        window.repaint();
+    }
 
     /**
      * Spawns an enemy at a random position along one of the four edges.
      */
-    public void spawnEnemy() {
+    private void spawnEnemy() {
         int x, y;
         int side = random.nextInt(4); // 0=top, 1=bottom, 2=left, 3=right
         switch (side) {
@@ -115,26 +148,25 @@ public class Ocean implements KeyListener, ActionListener, MouseListener {
         enemies.add(new Enemy(window, x, y));
     }
 
-    // Spawns a cannon ball from the center of the player ship to the target
-    public void spawnCannonBall(int endX, int endY) {
+    // Spawns a cannonball from the center of the player ship to the target
+    private void spawnCannonBall(int endX, int endY) {
         double spawnX = player.getX() + 50;
         double spawnY = player.getY() + 50;
-        cannonBalls.add(new CannonBall(spawnX, spawnY, endX, endY));
-    }
-
-    public void spawnExplosion(int x, int y) {
-        // TODO
+        cannonBalls.add(new CannonBall(spawnX, spawnY, endX, endY, window));
     }
 
     /* KeyListener methods */
 
     @Override
     public void keyTyped(KeyEvent e) {
+        // Intentionally left blank
     }
 
+    // Ran by KeyListener when a key is released
     @Override
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) {
+            // Movement
             case KeyEvent.VK_W:
                 up = false;
                 break;
@@ -150,9 +182,11 @@ public class Ocean implements KeyListener, ActionListener, MouseListener {
         }
     }
 
+    // Ran by KeyListener when a key is pressed
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
+            // Movement
             case KeyEvent.VK_W:
                 up = true;
                 break;
@@ -170,26 +204,33 @@ public class Ocean implements KeyListener, ActionListener, MouseListener {
 
     /* MouseListener */
 
+    // Called by MouseListener when the mouse is clicked
     @Override
     public void mouseClicked(MouseEvent e) {
-        spawnCannonBall(e.getX(), e.getY());
+        // Intentionally left blank
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        // Spawn a cannonball
+        spawnCannonBall(e.getX(), e.getY());
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        // Intentionally left blank
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
+        // Intentionally left blank
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+        // Intentionally left blank
     }
+
 
     /* Getters */
 
