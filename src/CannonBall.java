@@ -39,7 +39,7 @@ public class CannonBall {
                 explosionFrames[i] = sheet.getSubimage(col * FRAME_SIZE, row * FRAME_SIZE, FRAME_SIZE, FRAME_SIZE);
             }
         } catch (IOException | IllegalArgumentException e) {
-            System.err.println("Could not load explosion.png: " + e.getMessage());
+            System.err.println("Could not load explosion_spritesheet.png: " + e.getMessage());
             explosionFrames = null;
         }
     }
@@ -128,15 +128,14 @@ public class CannonBall {
 
     // Apply damage
     public void applyDamage(ArrayList<Ship> ships) {
-        System.out.println("applying damage in cannonball");
         if (!isExploding)
             return;
 
         int explosionRadius = EXPLOSION_SIZE / 2;
         for (Ship ship : ships) {
             // Use the ships center for distance check
-            double shipCenterX = ship.getX() + Ship.WIDTH / 2;
-            double shipCenterY = ship.getY() + Ship.HEIGHT / 2;
+            double shipCenterX = ship.getX() + Ship.WIDTH / 2.0;
+            double shipCenterY = ship.getY() + Ship.HEIGHT / 2.0;
             double dist = Math.sqrt(Math.pow(x - shipCenterX, 2) + Math.pow(y - shipCenterY, 2));
             if (dist <= explosionRadius) {
                 ship.takeDamage(damage);
@@ -164,17 +163,5 @@ public class CannonBall {
 
     public boolean isDone() {
         return done;
-    }
-
-    public boolean isExploding() {
-        return isExploding;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
     }
 }

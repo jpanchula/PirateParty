@@ -6,7 +6,6 @@ public class Player extends Ship {
 
     private int points;
 
-    // TODO
     public Player(OceanView window, int x, int y) {
         super(window, x, y, SPEED, HEALTH);
         super.setImage(new ImageIcon("Resources/pirate_ship.png").getImage());

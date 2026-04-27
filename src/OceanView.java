@@ -74,14 +74,14 @@ public class OceanView extends JFrame  {
         // Draw the player
         backend.getPlayer().draw(g);
 
-        // Draw all CannonBalls
-        for (CannonBall cb : backend.getCannonBalls()) {
-            cb.draw(g);
-        }
-
         // Draw all enemies
         for (Enemy en : backend.getEnemies()) {
             en.draw(g);
+        }
+
+        // Draw all CannonBalls
+        for (CannonBall cb : backend.getCannonBalls()) {
+            cb.draw(g);
         }
     }
 
