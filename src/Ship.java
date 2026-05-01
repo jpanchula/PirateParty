@@ -84,20 +84,20 @@ public class Ship {
         return canTakeDamage;
     }
 
+    public Image getImage() {
+        return image;
+    }
+
+    public OceanView getWindow() {
+        return window;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
     // Draws the ship
     public void draw(Graphics g) {
-        Graphics2D g2d = (Graphics2D)g;
-
-        if (!canTakeDamage) {
-            // 50% transparent during i-frames
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-        }
-
-        // Draw the ship
-        g2d.drawImage(image, (int)x, (int)y, WIDTH, HEIGHT, window);
-
-        // Reset composite
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-
+        g.drawImage(image, (int)x, (int)y, WIDTH, HEIGHT, window);
     }
 }

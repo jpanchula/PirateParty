@@ -19,7 +19,7 @@ public class CannonBall {
     private static final int TICKS_PER_FRAME = 2;
     private static final int EXPLOSION_SIZE = 100;
 
-    /* Static config */
+    /** Static config */
 
     private static BufferedImage[] explosionFrames;
 
@@ -44,7 +44,7 @@ public class CannonBall {
         }
     }
 
-    /* Instance variables */
+    /** Instance variables */
 
     // Current position (floating point for smooth motion)
     private double x, y;
@@ -62,7 +62,7 @@ public class CannonBall {
     private boolean done;
     private OceanView window;
 
-    /* Constructor */
+    /** Constructor */
     public CannonBall(double startX, double startY, int endX, int endY, OceanView window) {
         this.x = startX;
         this.y = startY;
@@ -86,7 +86,7 @@ public class CannonBall {
         }
     }
 
-    /** Returns true when the ball has reached (or passed) its target. */
+    // Returns true when the ball has reached (or passed) its target at finalX, finalY
     private boolean isTouching() {
         // Check if we've passed the target by seeing if the remaining distance
         // is now smaller than one step, or if we've overshot
