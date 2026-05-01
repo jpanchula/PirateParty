@@ -2,10 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Enemy extends Ship {
+    // Slightly slower than the player
+    private static final int SPEED = 1;
+    private static final int HEALTH = 10;
+
 
     public Enemy(OceanView window, int x, int y) {
-        super(window, x, y, 1); // speed 1, slightly slower than player
-        super.setImage(new ImageIcon("Resources/enemy_ship.png").getImage());
+        super(window, x, y, SPEED, HEALTH);
+        super.setImage(new ImageIcon("Resources/pirate_ship.png").getImage());
     }
 
     /**

@@ -1,62 +1,95 @@
 import java.awt.*;
 
 public class Ship {
-    public static final int DIR_UP = 0, DIR_DOWN = 1, DIR_LEFT = 2, DIR_RIGHT = 3;
+    public static final int WIDTH  = 100;
+    public static final int HEIGHT = 100;
 
-    /* Private Constant Variables */
-    private static final int WIDTH = 100;
-    private static final int HEIGHT = 100;
+    private static final int I_FRAMES  = 60;
+    private static final int BAR_WIDTH  = 60;
+    private static final int BAR_HEIGHT = 8;
+    private static final int BAR_OFFSET = 6;
 
     private double x, y, dx, dy;
     private int speed;
+    private int maxHealth;
+    private int health;
+
+    private boolean canTakeDamage;
+    private int tick;
 
     private Image image;
     private OceanView window;
 
-    // TODO
-    public Ship(OceanView window, int x, int y, int speed) {
+    public Ship(OceanView window, int x, int y, int speed, int health) {
         this.window = window;
         this.x = x;
         this.y = y;
         this.speed = speed;
+        this.health = health;
+        this.maxHealth = health;
+        canTakeDamage = true;
     }
 
     public void updatePosition() {
         x += dx;
         y += dy;
+
+        if (!canTakeDamage) tick++;
+        if (tick >= I_FRAMES) {
+            tick = 0;
+            canTakeDamage = true;
+        }
     }
 
-    // TODO
-    public void shoot(int x, int y) {
-
+    public void takeDamage(int amount) {
+        if (canTakeDamage) {
+            health -= amount;
+            tick = 0;
+            canTakeDamage = false;
+        }
     }
 
-    /* Setters */
+    public boolean isDead() { return health <= 0; }
 
-    // Sets the image
-    public void setImage(Image image) {
-        this.image = image;
-    }
+    public void setImage(Image image)              { this.image = image; }
+    public void setVelocity(double dx, double dy)  { this.dx = dx; this.dy = dy; }
 
-    // Sets the velocity
-    public void setVelocity(double dx, double dy) {
-        this.dx = dx;
-        this.dy = dy;
-    }
+    public int    getSpeed()       { return speed; }
+    public double getX()           { return x; }
+    public double getY()           { return y; }
+    public int    getHealth()      { return health; }
+    public int    getMaxHealth()   { return maxHealth; }
+    public boolean canTakeDamage() { return canTakeDamage; }
 
-    // Gets the speed
-    public int getSpeed() {
-        return speed;
-    }
-
-    public double getX() { return x; }
-
-    public double getY() { return y; }
-
-    // Draws the ship
     public void draw(Graphics g) {
-        // Cast to int, but keep double precision for smoother movement
-        g.drawImage(image, (int)x, (int)y, WIDTH, HEIGHT, window);
+        Graphics2D g2d = (Graphics2D) g;
+
+        if (!canTakeDamage)
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+
+        g2d.drawImage(image, (int) x, (int) y, WIDTH, HEIGHT, window);
+
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+
+        drawHealthBar(g2d);
+    }
+
+    private void drawHealthBar(Graphics2D g) {
+        int barX = (int) x + (WIDTH - BAR_WIDTH) / 2;
+        int barY = (int) y - BAR_HEIGHT - BAR_OFFSET;
+
+        double ratio = Math.max(0, (double) health / maxHealth);
+        int filledWidth = (int) (BAR_WIDTH * ratio);
+
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(barX, barY, BAR_WIDTH, BAR_HEIGHT);
+
+        if      (ratio > 0.5)  g.setColor(Color.GREEN);
+        else if (ratio > 0.25) g.setColor(Color.YELLOW);
+        else                   g.setColor(Color.RED);
+        g.fillRect(barX, barY, filledWidth, BAR_HEIGHT);
+
+        g.setColor(Color.BLACK);
+        g.drawRect(barX, barY, BAR_WIDTH, BAR_HEIGHT);
     }
 }
-//-
