@@ -7,6 +7,11 @@ public class OceanView extends JFrame  {
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 800;
 
+    private static final int HUD_BAR_X      = 20;
+    private static final int HUD_BAR_Y      = WINDOW_HEIGHT - 40;
+    private static final int HUD_BAR_WIDTH  = 200;
+    private static final int HUD_BAR_HEIGHT = 18;
+
     /* Private Constant Variables */
     private static final Color BACKGROUND_COLOR = new Color(50, 50, 200);
 
@@ -99,6 +104,27 @@ public class OceanView extends JFrame  {
     private void drawBackground (Graphics g){
         g.setColor(BACKGROUND_COLOR);
         g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    }
+
+    private void drawHUD(Graphics g) {
+        Player p = backend.getPlayer();
+        double ratio = Math.max(0, (double) p.getHealth() / p.getMaxHealth());
+        int filledWidth = (int) (HUD_BAR_WIDTH * ratio);
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 13));
+        g.drawString("HP", HUD_BAR_X, HUD_BAR_Y - 4);
+
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(HUD_BAR_X + 22, HUD_BAR_Y - HUD_BAR_HEIGHT + 4, HUD_BAR_WIDTH, HUD_BAR_HEIGHT);
+
+        if      (ratio > 0.5)  g.setColor(Color.GREEN);
+        else if (ratio > 0.25) g.setColor(Color.YELLOW);
+        else                   g.setColor(Color.RED);
+        g.fillRect(HUD_BAR_X + 22, HUD_BAR_Y - HUD_BAR_HEIGHT + 4, filledWidth, HUD_BAR_HEIGHT);
+
+        g.setColor(Color.WHITE);
+        g.drawRect(HUD_BAR_X + 22, HUD_BAR_Y - HUD_BAR_HEIGHT + 4, HUD_BAR_WIDTH, HUD_BAR_HEIGHT);
     }
 
 
