@@ -89,7 +89,17 @@ public class Ship {
         return canTakeDamage;
     }
 
-    public int    getHealth()      { return health; }
+    public Image getImage() {
+        return image;
+    }
+
+    public OceanView getWindow() {
+        return window;
+    }
+
+    public int getHealth() {
+        return health;
+    }
 
     public int    getMaxHealth()   { return maxHealth; }
 
