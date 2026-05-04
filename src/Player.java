@@ -45,6 +45,10 @@ public class Player extends Ship {
         points += value;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
     @Override
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;

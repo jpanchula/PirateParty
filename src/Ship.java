@@ -15,7 +15,6 @@ public class Ship {
     private int speed;
     private int maxHealth;
     private int health;
-    private int maxHealth;
 
     private boolean canTakeDamage;
     private int tick;
@@ -30,7 +29,6 @@ public class Ship {
         this.speed = speed;
         this.maxHealth = health;
         this.health = health;
-        this.maxHealth = health;
         canTakeDamage = true;
     }
 
@@ -99,11 +97,13 @@ public class Ship {
         return window;
     }
 
+    public int getHealth() {
+        return health;
+    }
+
     public int getMaxHealth() {
         return maxHealth;
     }
-
-    public int    getMaxHealth()   { return maxHealth; }
 
     private void drawHealthBar(Graphics2D g) {
         int barX = (int) x + (WIDTH - BAR_WIDTH) / 2;
