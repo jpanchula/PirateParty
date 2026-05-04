@@ -172,7 +172,7 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
     private void spawnGold(Enemy enemy) {
         // Create a new piece of gold with the value of the enemy's health
-        treasure.add(new Gold((int)enemy.getX(), (int)enemy.getY(), enemy.getHealth(), window));
+        treasure.add(new Gold((int)enemy.getX(), (int)enemy.getY(), enemy.getMaxHealth(), window));
     }
 
     // Spawns a cannonball from the center of the player ship to the target
