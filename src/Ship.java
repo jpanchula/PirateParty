@@ -13,6 +13,7 @@ public class Ship {
 
     private double x, y, dx, dy;
     private int speed;
+    private int maxHealth;
     private int health;
     private int maxHealth;
 
@@ -27,6 +28,7 @@ public class Ship {
         this.x = x;
         this.y = y;
         this.speed = speed;
+        this.maxHealth = health;
         this.health = health;
         this.maxHealth = health;
         canTakeDamage = true;
@@ -97,8 +99,8 @@ public class Ship {
         return window;
     }
 
-    public int getHealth() {
-        return health;
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
     public int    getMaxHealth()   { return maxHealth; }
