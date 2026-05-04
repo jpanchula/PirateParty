@@ -97,12 +97,12 @@ public class Ship {
         return window;
     }
 
-    public int getHealth() {
-        return health;
-    }
-
     public int getMaxHealth() {
         return maxHealth;
+    }
+
+    public int getHealth() {
+        return health;
     }
 
     private void drawHealthBar(Graphics2D g) {
