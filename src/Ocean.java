@@ -1,6 +1,7 @@
 // Pirate Party by Jacob Panchula and Sachin Sandhu
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -98,6 +99,8 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
         // Update cannonBalls ArrayList
         cannonBalls.removeIf(CannonBall::isDone);
+        enemies.removeIf(Enemy::isDead);
+
 
         /* --- Enemies --- */
         // Find the player center
@@ -107,8 +110,16 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
         for (Enemy en : enemies) {
             if (en.isDead())
                 spawnGold(en);
-            else
+            else {
                 en.chasePlayer(playerCenterX, playerCenterY);
+                en.tickShootTimer();
+                if (en.canShoot()) {
+                    double spawnX = en.getX() + Ship.WIDTH / 2.0;
+                    double spawnY = en.getY() + Ship.HEIGHT / 2.0;
+                    cannonBalls.add(new CannonBall(spawnX, spawnY, (int) playerCenterX, (int) playerCenterY, window));
+                    en.resetShootTimer();
+                }
+            }
         }
         // Update ArrayList outside the loop body
         enemies.removeIf(Enemy::isDead);
