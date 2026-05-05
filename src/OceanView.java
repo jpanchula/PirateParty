@@ -46,11 +46,10 @@ public class OceanView extends JFrame  {
         Toolkit.getDefaultToolkit().sync();
     }
 
-
     // Main paint function
     public void myPaint(Graphics g) {
         switch (backend.getState()) {
-            case Ocean.STATE_MENU:
+            case Ocean.STATE_INSTR:
                 drawMenu(g);
                 break;
             case Ocean.STATE_PLAY:
@@ -61,7 +60,6 @@ public class OceanView extends JFrame  {
                 break;
         }
     }
-
 
     private void drawMenu(Graphics g) {
         g.setColor(Color.BLACK);
@@ -96,7 +94,6 @@ public class OceanView extends JFrame  {
         // Draw HUD
         drawHUD(g);
     }
-
 
     private void drawEnd (Graphics g) {
         // Black background

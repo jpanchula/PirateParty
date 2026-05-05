@@ -12,8 +12,8 @@ public class Gold {
 
     /** Constructor */
     public Gold(int x, int y, int value, OceanView window) {
-        this.x = x;
-        this.y = y;
+        this.x = x - SIZE / 2;
+        this.y = y - SIZE / 2;
         isCollected = false;
         this.value = value;
         image = new ImageIcon("Resources/gold.png").getImage();

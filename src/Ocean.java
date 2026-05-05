@@ -1,14 +1,13 @@
 // Pirate Party by Jacob Panchula and Sachin Sandhu
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Ocean implements KeyListener, ActionListener, MouseListener, MouseMotionListener {
     /* Public Constant Variables */
-    public static final int STATE_MENU = 0;
+    public static final int STATE_INSTR = 0;
     public static final int STATE_PLAY = 1;
     public static final int STATE_END = 2;
 
@@ -18,6 +17,7 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
     // Spawn one enemy every this many ticks (~3 seconds at 60fps)
     private static final int ENEMY_SPAWN_INTERVAL = 180;
 
+    /* Instance Variables */
     private OceanView window;
     private Player player;
     private ArrayList<Enemy> enemies;
@@ -35,9 +35,6 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
     private boolean up, down, left, right;
 
     /* Constructor */
-    private static final int FPS = 60;
-    private static final int FRAME_DELAY_MS = 1000 / FPS;
-
     public Ocean() {
         // Initialize the ArrayLists
         cannonBalls = new ArrayList<>();
@@ -46,7 +43,6 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
         waveNum = 1;
         shipsLeft = 0;
-        state = 0;
 
         // Create the frontend window and attach the components
         window = new OceanView(this);
@@ -55,7 +51,7 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
         window.addMouseMotionListener(this);
 
         player = new Player(window, OceanView.WINDOW_WIDTH / 2, OceanView.WINDOW_HEIGHT / 2);
-        state = STATE_PLAY;
+        state = STATE_INSTR;
         waveNum = 0;
         shipsLeft = 0;
 
@@ -67,15 +63,24 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
     // Called by the clock every 16 ms
     public void actionPerformed(ActionEvent e) {
         switch(state) {
+            case STATE_INSTR:
+                updateInstructions();
+                break;
             case STATE_PLAY:
                 updatePlay();
                 break;
             case STATE_END:
-
+                updateEnd();
+                break;
         }
     }
 
     /** Update methods */
+
+    // Instructions state update method
+    private void updateInstructions() {
+        window.repaint();
+    }
 
     // Play state update method
     private void updatePlay() {
@@ -102,8 +107,8 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
         /* --- Enemies --- */
         // Find the player center
-        double playerCenterX = player.getX() + Ship.HEIGHT;
-        double playerCenterY = player.getY() + Ship.WIDTH;
+        double playerCenterX = player.getX() + Ship.HEIGHT / 2.0;
+        double playerCenterY = player.getY() + Ship.WIDTH / 2.0;
         // Find the enemy
         for (Enemy en : enemies) {
             if (en.isDead())
@@ -181,7 +186,9 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
     private void spawnGold(Enemy enemy) {
         // Create a new piece of gold with the value of the enemy's health
-        treasure.add(new Gold((int)enemy.getX(), (int)enemy.getY(), enemy.getMaxHealth(), window));
+        int enemyCenterX = (int)enemy.getX() + Ship.WIDTH / 2;
+        int enemyCenterY = (int)enemy.getY() + Ship.HEIGHT / 2;
+        treasure.add(new Gold(enemyCenterX, enemyCenterY, enemy.getMaxHealth(), window));
     }
 
     // Spawns a cannonball from the center of the player ship to the target
@@ -248,8 +255,14 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // Spawn a cannonball
-        spawnCannonBall(e.getX(), e.getY());
+        if (state == STATE_INSTR) {
+            // Start the game
+            state = STATE_PLAY;
+        }
+        else if (state == STATE_PLAY) {
+            // Spawn a cannonball
+            spawnCannonBall(e.getX(), e.getY());
+        }
     }
 
     @Override
