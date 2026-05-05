@@ -1,6 +1,7 @@
 // Pirate Party by Jacob Panchula and Sachin Sandhu
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -108,6 +109,8 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
         // Update cannonBalls ArrayList
         cannonBalls.removeIf(CannonBall::isDone);
+        enemies.removeIf(Enemy::isDead);
+
 
         /* --- Enemies --- */
         // Find the player center

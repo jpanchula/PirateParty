@@ -5,12 +5,12 @@ import java.util.Random;
 public class Enemy extends Ship {
     // Slightly slower than the player
     private static final int SPEED = 1;
+    private static final int HEALTH = 10;
     private static final int SHOOT_COOLDOWN = 180;
     private int shootTimer;
 
     public Enemy(OceanView window, int x, int y, int health) {
         super(window, x, y, SPEED, health);
-
         super.setImage(new ImageIcon("Resources/pirate_ship.png").getImage());
         shootTimer = new Random().nextInt(SHOOT_COOLDOWN);
     }
