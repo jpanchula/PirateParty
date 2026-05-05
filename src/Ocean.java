@@ -167,7 +167,7 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
                 y = random.nextInt(OceanView.WINDOW_HEIGHT);
                 break;
         }
-        enemies.add(new Enemy(window, x, y));
+        enemies.add(new Enemy(window, x, y, (int)(Math.random() * 41) + 10));
     }
 
     private void spawnGold(Enemy enemy) {

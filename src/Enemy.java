@@ -6,8 +6,8 @@ public class Enemy extends Ship {
     private static final int SPEED = 1;
     private static final int HEALTH = 10;
 
-    public Enemy(OceanView window, int x, int y) {
-        super(window, x, y, SPEED, HEALTH);
+    public Enemy(OceanView window, int x, int y, int health) {
+        super(window, x, y, SPEED, health);
         super.setImage(new ImageIcon("Resources/pirate_ship.png").getImage());
     }
 

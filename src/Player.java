@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Player extends Ship {
+    /* Private constants */
     private static final int SPEED = 2;
     private static final int HEALTH = 100;
 
