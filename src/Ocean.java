@@ -99,8 +99,6 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
         // Update cannonBalls ArrayList
         cannonBalls.removeIf(CannonBall::isDone);
-        enemies.removeIf(Enemy::isDead);
-
 
         /* --- Enemies --- */
         // Find the player center
