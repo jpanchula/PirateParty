@@ -13,8 +13,8 @@ public class Ship {
 
     private double x, y, dx, dy;
     private int speed;
-    private int health;
     private int maxHealth;
+    private int health;
 
     private boolean canTakeDamage;
     private int tick;
@@ -27,8 +27,8 @@ public class Ship {
         this.x = x;
         this.y = y;
         this.speed = speed;
-        this.health = health;
         this.maxHealth = health;
+        this.health = health;
         canTakeDamage = true;
     }
 
@@ -89,9 +89,21 @@ public class Ship {
         return canTakeDamage;
     }
 
-    public int    getHealth()      { return health; }
+    public Image getImage() {
+        return image;
+    }
 
-    public int    getMaxHealth()   { return maxHealth; }
+    public OceanView getWindow() {
+        return window;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public int getHealth() {
+        return health;
+    }
 
     private void drawHealthBar(Graphics2D g) {
         int barX = (int) x + (WIDTH - BAR_WIDTH) / 2;

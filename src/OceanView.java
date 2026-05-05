@@ -2,17 +2,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
-/* Public Constant Variables */
 public class OceanView extends JFrame  {
+    /* Public Constant Variables */
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 800;
 
-    private static final int HUD_BAR_X      = 20;
-    private static final int HUD_BAR_Y      = WINDOW_HEIGHT - 40;
-    private static final int HUD_BAR_WIDTH  = 200;
+    /* Private Constant Variables */
+    private static final int HUD_BAR_X = 20;
+    private static final int HUD_BAR_Y = WINDOW_HEIGHT - 40;
+    private static final int HUD_BAR_WIDTH = 200;
     private static final int HUD_BAR_HEIGHT = 18;
 
-    /* Private Constant Variables */
     private static final Color BACKGROUND_COLOR = new Color(50, 50, 200);
 
     private Ocean backend;
@@ -64,7 +64,6 @@ public class OceanView extends JFrame  {
 
 
     private void drawMenu(Graphics g) {
-        // TODO
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 36));
         g.drawString("Pirate Party", WINDOW_WIDTH / 2 - 90, WINDOW_HEIGHT / 2);
@@ -76,18 +75,26 @@ public class OceanView extends JFrame  {
         // Draw ocean background
         drawBackground(g);
 
-        // Draw the player
+        // Draw Gold
+        for (Gold gold : backend.getTreasure()) {
+            gold.draw(g);
+        }
+
+        // Draw Player
         backend.getPlayer().draw(g);
 
-        // Draw all enemies
+        // Draw Enemies
         for (Enemy en : backend.getEnemies()) {
             en.draw(g);
         }
 
-        // Draw all CannonBalls
+        // Draw CannonBalls
         for (CannonBall cb : backend.getCannonBalls()) {
             cb.draw(g);
         }
+
+        // Draw HUD
+        drawHUD(g);
     }
 
 
@@ -99,6 +106,8 @@ public class OceanView extends JFrame  {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 36));
         g.drawString("Game Over", WINDOW_WIDTH / 2 - 80, WINDOW_HEIGHT / 2);
+        int points = backend.getPlayer().getPoints();
+        g.drawString("Points: " + points, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 + 100);
     }
 
     private void drawBackground (Graphics g){
@@ -126,7 +135,4 @@ public class OceanView extends JFrame  {
         g.setColor(Color.WHITE);
         g.drawRect(HUD_BAR_X + 22, HUD_BAR_Y - HUD_BAR_HEIGHT + 4, HUD_BAR_WIDTH, HUD_BAR_HEIGHT);
     }
-
-
-
 }
