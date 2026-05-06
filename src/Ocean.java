@@ -166,9 +166,6 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
                 highscore = player.getScore();
                 Files.writeString(filePath, Integer.toString(highscore));
             }
-            // Writing to the file
-            highscore = player.getScore();
-            Files.writeString(filePath, Integer.toString(highscore));
         }
         catch (IOException e) {
             System.err.println("An error occurred: " + e.getMessage());
