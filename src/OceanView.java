@@ -62,11 +62,21 @@ public class OceanView extends JFrame  {
     }
 
     private void drawMenu(Graphics g) {
-        g.setColor(Color.BLACK);
+        drawBackground(g);
+        // Draw the title
+        g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 36));
-        g.drawString("Pirate Party", WINDOW_WIDTH / 2 - 90, WINDOW_HEIGHT / 2);
+        g.drawString("Pirate Party", WINDOW_WIDTH / 2 - 90, 300);
+        // Draw the instructions header
+        g.setFont(new Font("Arial", Font.BOLD, 24));
+        g.drawString("Instructions", WINDOW_WIDTH / 2 - 75, 350);
+        // Draw the instructions
         g.setFont(new Font("Arial", Font.PLAIN, 18));
-        g.drawString("Click to start", WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 + 40);
+        g.drawString("Move with WASD and click to shoot!", WINDOW_WIDTH / 2 - 115, 375);
+        g.drawString("Destroy enemy ships!", WINDOW_WIDTH / 2 - 115, 400);
+        g.drawString("Collect as much gold as possible!", WINDOW_WIDTH / 2 - 115, 425);
+        g.setFont(new Font("Arial", Font.ITALIC, 18));
+        g.drawString("Click to start", WINDOW_WIDTH / 2 - 50, 465);
     }
 
     private void drawPlay (Graphics g) {
