@@ -46,7 +46,7 @@ public class Player extends Ship {
         points += value;
     }
 
-    public int getPoints() {
+    public int getScore() {
         return points;
     }
 

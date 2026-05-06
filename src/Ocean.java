@@ -2,8 +2,13 @@
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
+import java.nio.file.Files;
 
 public class Ocean implements KeyListener, ActionListener, MouseListener, MouseMotionListener {
     /* Public Constant Variables */
@@ -27,12 +32,15 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
     private int waveNum;
     private int shipsLeft;
     private int state;
+    private int highscore;
 
     private int tickCount = 0;
     private Random random = new Random();
 
     // Vertical and horizontal inputs
     private boolean up, down, left, right;
+
+    Path filePath;
 
     /* Constructor */
     public Ocean() {
@@ -55,6 +63,8 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
         waveNum = 0;
         shipsLeft = 0;
 
+        filePath = Paths.get("Resources/highscore.txt");
+
         // Create and start the clock
         Timer clock = new Timer(DELAY_MILLISECONDS, this);
         clock.start();
@@ -63,24 +73,17 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
     // Called by the clock every 16 ms
     public void actionPerformed(ActionEvent e) {
         switch(state) {
-            case STATE_INSTR:
-                updateInstructions();
-                break;
             case STATE_PLAY:
                 updatePlay();
                 break;
+            case STATE_INSTR:
             case STATE_END:
-                updateEnd();
+                window.repaint();
                 break;
         }
     }
 
-    /** Update methods */
-
-    // Instructions state update method
-    private void updateInstructions() {
-        window.repaint();
-    }
+    /** Helper methods */
 
     // Play state update method
     private void updatePlay() {
@@ -99,6 +102,7 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
         }
         // Check if the player is dead
         if (player.isDead()) {
+            writeHighscore();
             state = STATE_END;
         }
 
@@ -152,9 +156,21 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
         window.repaint();
     }
 
-    // End state update method
-    private void updateEnd() {
-        window.repaint();
+    private void writeHighscore() {
+        try {
+            // Reading from a file
+            String content = Files.readString(filePath);
+            highscore = Integer.parseInt(content);
+            if (player.getScore() < highscore) {
+                return;
+            }
+            // Writing to the file
+            highscore = player.getScore();
+            Files.writeString(filePath, Integer.toString(highscore));
+        }
+        catch (IOException e) {
+            System.err.println("An error occurred: " + e.getMessage());
+        }
     }
 
     /** Spawn methods */
@@ -312,6 +328,10 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
     public Player getPlayer() {
         return player;
+    }
+
+    public int getHighscore() {
+        return highscore;
     }
 
     public int getWaveNum() {

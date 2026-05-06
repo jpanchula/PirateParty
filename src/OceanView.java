@@ -113,8 +113,8 @@ public class OceanView extends JFrame  {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 36));
         g.drawString("Game Over", WINDOW_WIDTH / 2 - 80, WINDOW_HEIGHT / 2);
-        int points = backend.getPlayer().getPoints();
-        g.drawString("Points: " + points, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 + 100);
+        g.drawString("Points: " + backend.getPlayer().getScore(), WINDOW_WIDTH / 2 - 80, WINDOW_HEIGHT / 2 + 100);
+        g.drawString("Highscore: " + backend.getHighscore(), WINDOW_WIDTH / 2 - 80, WINDOW_WIDTH / 2 + 150);
     }
 
     private void drawBackground (Graphics g){
