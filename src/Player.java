@@ -39,14 +39,14 @@ public class Player extends Ship {
     }
 
     public void calculateRotation(int mouseX, int mouseY) {
-        rotation = Math.atan2(mouseY - (getY() + HEIGHT / 2), mouseX - (getX() + WIDTH / 2)) - (0.5 * Math.PI);
+        rotation = Math.atan2(mouseY - (getY() + HEIGHT / 2.0), mouseX - (getX() + WIDTH / 2.0)) - (0.5 * Math.PI);
     }
 
     public void addPoints(int value) {
         points += value;
     }
 
-    public int getPoints() {
+    public int getScore() {
         return points;
     }
 
@@ -61,13 +61,13 @@ public class Player extends Ship {
         }
 
         // Set rotation
-        g2d.rotate(rotation, getX() + WIDTH / 2, getY() + HEIGHT / 2);
+        g2d.rotate(rotation, getX() + WIDTH / 2.0, getY() + HEIGHT / 2.0);
 
         // Draw the ship
         g2d.drawImage(getImage(), (int)getX(), (int)getY(), WIDTH, HEIGHT, getWindow());
 
         // Reset transparency and rotation
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-        g2d.rotate(-rotation, getX() + WIDTH / 2, getY() + HEIGHT / 2);
+        g2d.rotate(-rotation, getX() + WIDTH / 2.0, getY() + HEIGHT / 2.0);
     }
 }

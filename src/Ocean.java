@@ -1,14 +1,18 @@
 // Pirate Party by Jacob Panchula and Sachin Sandhu
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
+import java.nio.file.Files;
 
 public class Ocean implements KeyListener, ActionListener, MouseListener, MouseMotionListener {
     /* Public Constant Variables */
-    public static final int STATE_MENU = 0;
+    public static final int STATE_INSTR = 0;
     public static final int STATE_PLAY = 1;
     public static final int STATE_END = 2;
 
@@ -18,6 +22,7 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
     // Spawn one enemy every this many ticks (~3 seconds at 60fps)
     private static final int ENEMY_SPAWN_INTERVAL = 180;
 
+    /* Instance Variables */
     private OceanView window;
     private Player player;
     private ArrayList<Enemy> enemies;
@@ -27,6 +32,7 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
     private int waveNum;
     private int shipsLeft;
     private int state;
+    private int highscore;
 
     private int tickCount = 0;
     private Random random = new Random();
@@ -34,10 +40,9 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
     // Vertical and horizontal inputs
     private boolean up, down, left, right;
 
-    /* Constructor */
-    private static final int FPS = 60;
-    private static final int FRAME_DELAY_MS = 1000 / FPS;
+    Path filePath;
 
+    /* Constructor */
     public Ocean() {
         // Initialize the ArrayLists
         cannonBalls = new ArrayList<>();
@@ -46,7 +51,6 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
         waveNum = 1;
         shipsLeft = 0;
-        state = 0;
 
         // Create the frontend window and attach the components
         window = new OceanView(this);
@@ -55,9 +59,11 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
         window.addMouseMotionListener(this);
 
         player = new Player(window, OceanView.WINDOW_WIDTH / 2, OceanView.WINDOW_HEIGHT / 2);
-        state = STATE_PLAY;
+        state = STATE_INSTR;
         waveNum = 0;
         shipsLeft = 0;
+
+        filePath = Paths.get("Resources/highscore.txt");
 
         // Create and start the clock
         Timer clock = new Timer(DELAY_MILLISECONDS, this);
@@ -70,12 +76,14 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
             case STATE_PLAY:
                 updatePlay();
                 break;
+            case STATE_INSTR:
             case STATE_END:
-
+                window.repaint();
+                break;
         }
     }
 
-    /** Update methods */
+    /** Helper methods */
 
     // Play state update method
     private void updatePlay() {
@@ -94,6 +102,7 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
         }
         // Check if the player is dead
         if (player.isDead()) {
+            writeHighscore();
             state = STATE_END;
         }
 
@@ -102,8 +111,8 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
         /* --- Enemies --- */
         // Find the player center
-        double playerCenterX = player.getX() + Ship.HEIGHT;
-        double playerCenterY = player.getY() + Ship.WIDTH;
+        double playerCenterX = player.getX() + Ship.HEIGHT / 2.0;
+        double playerCenterY = player.getY() + Ship.WIDTH / 2.0;
         // Find the enemy
         for (Enemy en : enemies) {
             if (en.isDead())
@@ -147,9 +156,20 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
         window.repaint();
     }
 
-    // End state update method
-    private void updateEnd() {
-        window.repaint();
+    private void writeHighscore() {
+        try {
+            // Reading from a file
+            String content = Files.readString(filePath);
+            highscore = Integer.parseInt(content);
+            if (player.getScore() > highscore) {
+                // Write the new highscore to the file
+                highscore = player.getScore();
+                Files.writeString(filePath, Integer.toString(highscore));
+            }
+        }
+        catch (IOException e) {
+            System.err.println("An error occurred: " + e.getMessage());
+        }
     }
 
     /** Spawn methods */
@@ -181,7 +201,9 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
     private void spawnGold(Enemy enemy) {
         // Create a new piece of gold with the value of the enemy's health
-        treasure.add(new Gold((int)enemy.getX(), (int)enemy.getY(), enemy.getMaxHealth(), window));
+        int enemyCenterX = (int)enemy.getX() + Ship.WIDTH / 2;
+        int enemyCenterY = (int)enemy.getY() + Ship.HEIGHT / 2;
+        treasure.add(new Gold(enemyCenterX, enemyCenterY, enemy.getMaxHealth(), window));
     }
 
     // Spawns a cannonball from the center of the player ship to the target
@@ -248,8 +270,14 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // Spawn a cannonball
-        spawnCannonBall(e.getX(), e.getY());
+        if (state == STATE_INSTR) {
+            // Start the game
+            state = STATE_PLAY;
+        }
+        else if (state == STATE_PLAY) {
+            // Spawn a cannonball
+            spawnCannonBall(e.getX(), e.getY());
+        }
     }
 
     @Override
@@ -299,6 +327,10 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
     public Player getPlayer() {
         return player;
+    }
+
+    public int getHighscore() {
+        return highscore;
     }
 
     public int getWaveNum() {
