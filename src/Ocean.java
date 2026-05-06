@@ -38,6 +38,10 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
     private int tickCount = 0;
     private Random random = new Random();
 
+    // Player shoot cooldown (~0.25 seconds at 60fps)
+    private static final int PLAYER_SHOOT_COOLDOWN = 15;
+    private int playerShootTimer = 0;
+
     // Vertical and horizontal inputs
     private boolean up, down, left, right;
 
@@ -95,6 +99,7 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
         /* --- Player --- */
         player.calculateVelocity(up, down, left, right);
+        if (playerShootTimer > 0) playerShootTimer--;
 
         /* --- CannonBalls --- */
         for (CannonBall cb : cannonBalls) {
@@ -209,9 +214,11 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
     // Spawns a cannonball from the center of the player ship to the target
     private void spawnCannonBall(int endX, int endY) {
+        if (playerShootTimer > 0) return;
         double spawnX = player.getX() + 50;
         double spawnY = player.getY() + 50;
         cannonBalls.add(new CannonBall(spawnX, spawnY, endX, endY, window));
+        playerShootTimer = PLAYER_SHOOT_COOLDOWN;
     }
 
     /** KeyListener */
