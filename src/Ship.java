@@ -7,11 +7,9 @@ public class Ship {
 
     /* Private constants */
     private static final int I_FRAMES = 60;
-    private static final int BAR_WIDTH  = 60;
-    private static final int BAR_HEIGHT = 8;
-    private static final int BAR_OFFSET = 6;
 
     private double x, y, dx, dy;
+    private double rotation;
     private int speed;
     private int maxHealth;
     private int health;
@@ -71,6 +69,10 @@ public class Ship {
         this.dy = dy;
     }
 
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+    }
+
     /* Getters */
 
     public int getSpeed() {
@@ -83,6 +85,14 @@ public class Ship {
 
     public double getY() {
         return y;
+    }
+
+    public double getDx() {
+        return dx;
+    }
+
+    public double getDy() {
+        return dy;
     }
 
     public boolean canTakeDamage() {
@@ -105,25 +115,6 @@ public class Ship {
         return health;
     }
 
-    private void drawHealthBar(Graphics2D g) {
-        int barX = (int) x + (WIDTH - BAR_WIDTH) / 2;
-        int barY = (int) y - BAR_HEIGHT - BAR_OFFSET;
-
-        double ratio = Math.max(0, (double) health / maxHealth);
-        int filledWidth = (int) (BAR_WIDTH * ratio);
-
-        g.setColor(Color.DARK_GRAY);
-        g.fillRect(barX, barY, BAR_WIDTH, BAR_HEIGHT);
-
-        if      (ratio > 0.5)  g.setColor(Color.GREEN);
-        else if (ratio > 0.25) g.setColor(Color.YELLOW);
-        else                   g.setColor(Color.RED);
-        g.fillRect(barX, barY, filledWidth, BAR_HEIGHT);
-
-        g.setColor(Color.BLACK);
-        g.drawRect(barX, barY, BAR_WIDTH, BAR_HEIGHT);
-    }
-
     // Draws the ship
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
@@ -133,13 +124,14 @@ public class Ship {
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
         }
 
+        // Set rotation
+        g2d.rotate(rotation, getX() + WIDTH / 2.0, getY() + HEIGHT / 2.0);
+
         // Draw the ship
         g2d.drawImage(image, (int)x, (int)y, WIDTH, HEIGHT, window);
 
-        // Reset composite
+        // Reset composite and rotation
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-
-        drawHealthBar(g2d);
-
+        g2d.rotate(-rotation, getX() + WIDTH / 2.0, getY() + HEIGHT / 2.0);
     }
 }

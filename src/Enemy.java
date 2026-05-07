@@ -5,11 +5,18 @@ import java.awt.image.RescaleOp;
 import java.util.Random;
 
 public class Enemy extends Ship {
+    /* Private Constants */
+    private static final int BAR_WIDTH  = 60;
+    private static final int BAR_HEIGHT = 8;
+    private static final int BAR_OFFSET = 6;
     // Slightly slower than the player
     private static final int SPEED = 1;
     private static final int SHOOT_COOLDOWN = 180;
+
+    /* Instance Variables */
     private int shootTimer;
 
+    /* Constructor */
     public Enemy(OceanView window, int x, int y, int health) {
         super(window, x, y, SPEED, health);
         super.setImage(makeEnemyImage());
@@ -57,5 +64,38 @@ public class Enemy extends Ship {
         } else {
             setVelocity(0, 0);
         }
+        calculateRotation();
+    }
+
+    // Sets the rotation to point in the direction of velocity
+    private void calculateRotation() {
+        setRotation(Math.atan2(getDy(), getDx()) - (0.5 * Math.PI));
+    }
+
+    // Draws the health bar above the ship
+    private void drawHealthBar(Graphics2D g) {
+        int barX = (int) getX() + (WIDTH - BAR_WIDTH) / 2;
+        int barY = (int) getY() - BAR_HEIGHT - BAR_OFFSET;
+
+        double ratio = Math.max(0, (double) getHealth() / getMaxHealth());
+        int filledWidth = (int) (BAR_WIDTH * ratio);
+
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(barX, barY, BAR_WIDTH, BAR_HEIGHT);
+
+        if      (ratio > 0.5)  g.setColor(Color.GREEN);
+        else if (ratio > 0.25) g.setColor(Color.YELLOW);
+        else                   g.setColor(Color.RED);
+        g.fillRect(barX, barY, filledWidth, BAR_HEIGHT);
+
+        g.setColor(Color.BLACK);
+        g.drawRect(barX, barY, BAR_WIDTH, BAR_HEIGHT);
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        // Draw the health bar after drawing the ship
+        super.draw(g);
+        drawHealthBar((Graphics2D)g);
     }
 }
