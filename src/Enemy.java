@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.util.Random;
 
 public class Enemy extends Ship {
@@ -10,9 +12,22 @@ public class Enemy extends Ship {
 
     public Enemy(OceanView window, int x, int y, int health) {
         super(window, x, y, SPEED, health);
-
-        super.setImage(new ImageIcon("Resources/pirate_ship.png").getImage());
+        super.setImage(makeEnemyImage());
         shootTimer = new Random().nextInt(SHOOT_COOLDOWN);
+    }
+
+    // Returns the pirate ship image with a red tint applied
+    private static Image makeEnemyImage() {
+        Image src = new ImageIcon("Resources/pirate_ship.png").getImage();
+
+        BufferedImage buf = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D temp = buf.createGraphics();
+        temp.drawImage(src, 0, 0, WIDTH, HEIGHT, null);
+        temp.dispose();
+
+        float[] scales = { 1.5f, 0.4f, 0.4f, 1.0f };
+        float[] offsets = { 0f, 0f, 0f, 0f };
+        return new RescaleOp(scales, offsets, null).filter(buf, null);
     }
 
     public void tickShootTimer() {
