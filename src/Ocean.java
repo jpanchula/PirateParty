@@ -3,7 +3,6 @@
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
