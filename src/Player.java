@@ -33,6 +33,12 @@ public class Player extends Ship {
             dy /= Math.sqrt(2);
         }
 
+        // Apply borders
+        if (getX() + dx < 0 || getX() + dx + Ship.WIDTH > OceanView.WINDOW_WIDTH)
+            dx = 0;
+        if (getY() + dy < 20 || getY() + dy + Ship.HEIGHT > OceanView.WINDOW_HEIGHT)
+            dy = 0;
+
         setVelocity(dx, dy);
     }
 
