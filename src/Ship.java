@@ -73,6 +73,15 @@ public class Ship {
         this.rotation = rotation;
     }
 
+    public void reset() {
+        this.health = maxHealth;
+        this.y = OceanView.WINDOW_HEIGHT / 2.0;
+        this.x = OceanView.WINDOW_WIDTH / 2.0;
+        this.tick = 0;
+        this.canTakeDamage = true;
+        this.rotation = 0;
+    }
+
     /* Getters */
 
     public int getSpeed() {
