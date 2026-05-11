@@ -16,8 +16,8 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
     public static final int STATE_END = 2;
 
     /* Private Constant Variables */
+    // Clock delay
     private static final int DELAY_MILLISECONDS = 16;
-
     // Spawn one enemy every this many ticks (~3 seconds at 60fps)
     private static final int ENEMY_SPAWN_INTERVAL = 180;
 
@@ -93,6 +93,7 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
         /* --- Player --- */
         player.calculateVelocity(up, down, left, right);
+        player.tickCanShoot();
 
         /* --- CannonBalls --- */
         for (CannonBall cb : cannonBalls) {
@@ -274,8 +275,11 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
             state = STATE_PLAY;
         }
         else if (state == STATE_PLAY) {
-            // Spawn a cannonball
-            spawnCannonBall(e.getX(), e.getY());
+            if (player.canShoot()) {
+                // Spawn a cannonball
+                spawnCannonBall(e.getX(), e.getY());
+                player.setCanShoot(false);
+            }
         }
     }
 

@@ -4,13 +4,17 @@ public class Player extends Ship {
     /* Private constants */
     private static final int SPEED = 2;
     private static final int HEALTH = 100;
+    private static final int SHOT_DELAY = 30;
 
     private int points;
+    private boolean canShoot;
+    private int shotTimer;
 
     public Player(OceanView window, int x, int y) {
         super(window, x, y, SPEED, HEALTH);
         super.setImage(new ImageIcon("Resources/pirate_ship.png").getImage());
         points = 0;
+        shotTimer = 0;
     }
 
     // Calculates and updates the player's velocity based on input
@@ -51,7 +55,27 @@ public class Player extends Ship {
         points += value;
     }
 
+    public void tickCanShoot() {
+        if (!canShoot) {
+            shotTimer++;
+        }
+        if (shotTimer >= SHOT_DELAY) {
+            canShoot = true;
+            shotTimer = 0;
+        }
+    }
+
+    // Getters
     public int getScore() {
         return points;
+    }
+
+    public boolean canShoot() {
+        return canShoot;
+    }
+
+    // Setters
+    public void setCanShoot(boolean canShoot) {
+        this.canShoot = canShoot;
     }
 }
