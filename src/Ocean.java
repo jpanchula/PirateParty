@@ -286,7 +286,6 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
         else if (state == STATE_END) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_SPACE:
-                    System.out.println("resetting");
                     reset();
                     break;
             }
