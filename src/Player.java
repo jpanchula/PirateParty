@@ -78,4 +78,8 @@ public class Player extends Ship {
     public void setCanShoot(boolean canShoot) {
         this.canShoot = canShoot;
     }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
 }

@@ -177,6 +177,7 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
         treasure.clear();
         cannonBalls.clear();
         player.reset();
+        player.setPoints(0);
         up = false;
         down = false;
         left = false;
