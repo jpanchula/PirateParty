@@ -16,8 +16,8 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
     public static final int STATE_END = 2;
 
     /* Private Constant Variables */
+    // Clock delay
     private static final int DELAY_MILLISECONDS = 16;
-
     // Spawn one enemy every this many ticks (~3 seconds at 60fps)
     private static final int ENEMY_SPAWN_INTERVAL = 180;
 
@@ -93,6 +93,7 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
 
         /* --- Player --- */
         player.calculateVelocity(up, down, left, right);
+        player.tickCanShoot();
 
         /* --- CannonBalls --- */
         for (CannonBall cb : cannonBalls) {
@@ -171,6 +172,19 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
         }
     }
 
+    private void reset() {
+        enemies.clear();
+        treasure.clear();
+        cannonBalls.clear();
+        player.reset();
+        player.setPoints(0);
+        up = false;
+        down = false;
+        left = false;
+        right = false;
+        state = STATE_INSTR;
+    }
+
     /** Spawn methods */
 
     // Spawns an enemy at a random position along one of the four edges
@@ -222,40 +236,59 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
     // Ran by KeyListener when a key is released
     @Override
     public void keyReleased(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            // Movement
-            case KeyEvent.VK_W:
-                up = false;
-                break;
-            case KeyEvent.VK_S:
-                down = false;
-                break;
-            case KeyEvent.VK_A:
-                left = false;
-                break;
-            case KeyEvent.VK_D:
-                right = false;
-                break;
+        if (state == STATE_PLAY) {
+            switch (e.getKeyCode()) {
+                // Movement
+                case KeyEvent.VK_W:
+                case KeyEvent.VK_UP:
+                    up = false;
+                    break;
+                case KeyEvent.VK_S:
+                case KeyEvent.VK_DOWN:
+                    down = false;
+                    break;
+                case KeyEvent.VK_A:
+                case KeyEvent.VK_LEFT:
+                    left = false;
+                    break;
+                case KeyEvent.VK_D:
+                case KeyEvent.VK_RIGHT:
+                    right = false;
+                    break;
+            }
         }
     }
 
     // Ran by KeyListener when a key is pressed
     @Override
     public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            // Movement
-            case KeyEvent.VK_W:
-                up = true;
-                break;
-            case KeyEvent.VK_S:
-                down = true;
-                break;
-            case KeyEvent.VK_A:
-                left = true;
-                break;
-            case KeyEvent.VK_D:
-                right = true;
-                break;
+        if (state == STATE_PLAY) {
+            switch (e.getKeyCode()) {
+                // Movement
+                case KeyEvent.VK_W:
+                case KeyEvent.VK_UP:
+                    up = true;
+                    break;
+                case KeyEvent.VK_S:
+                case KeyEvent.VK_DOWN:
+                    down = true;
+                    break;
+                case KeyEvent.VK_A:
+                case KeyEvent.VK_LEFT:
+                    left = true;
+                    break;
+                case KeyEvent.VK_D:
+                case KeyEvent.VK_RIGHT:
+                    right = true;
+                    break;
+            }
+        }
+        else if (state == STATE_END) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_SPACE:
+                    reset();
+                    break;
+            }
         }
     }
 
@@ -274,8 +307,11 @@ public class Ocean implements KeyListener, ActionListener, MouseListener, MouseM
             state = STATE_PLAY;
         }
         else if (state == STATE_PLAY) {
-            // Spawn a cannonball
-            spawnCannonBall(e.getX(), e.getY());
+            if (player.canShoot()) {
+                // Spawn a cannonball
+                spawnCannonBall(e.getX(), e.getY());
+                player.setCanShoot(false);
+            }
         }
     }
 

@@ -27,9 +27,9 @@ public class Enemy extends Ship {
     private static Image makeEnemyImage() {
         Image src = new ImageIcon("Resources/pirate_ship.png").getImage();
 
-        BufferedImage buf = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage buf = new BufferedImage(src.getWidth(null), src.getHeight(null), BufferedImage.TYPE_INT_ARGB);
         Graphics2D temp = buf.createGraphics();
-        temp.drawImage(src, 0, 0, WIDTH, HEIGHT, null);
+        temp.drawImage(src, 0, 0, src.getWidth(null), src.getHeight(null), null);
         temp.dispose();
 
         float[] scales = { 1.5f, 0.4f, 0.4f, 1.0f };
